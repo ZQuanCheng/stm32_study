@@ -44,14 +44,14 @@ void TIM1_PWM_Init(void)
 	TIM_OCStructInit(&TIM_OCInitStructure);							//结构体初始化，若结构体没有完整赋值
 																	//则最好执行此函数，给结构体所有成员都赋一个默认值
 																	//避免结构体初值不确定的问题
-	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;				//输出比较模式，选择PWM模式1
-	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;	//  通道输出状态：输出使能
-	TIM_OCInitStructure.TIM_OutputNState = TIM_OutputState_Enable;	//  互补通道输出状态：输出使能。只有高级定时器需要配置
-	TIM_OCInitStructure.TIM_Pulse = 75;								    //  通道CCR值。占空比duty = CCR / (ARR+1) = 25 / (100-1+1) = 25%
-	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;		    //  通道输出极性，选择为高，若选择极性为低，则输出高低电平取反。
-	TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCPolarity_High;	    //  互补通道输出极性，选择为高，若选择极性为低，则输出高低电平取反。	只有高级定时器需要配置
-	TIM_OCInitStructure.TIM_OCIdleState = TIM_OCNIdleState_Reset;    //  空闲状态下通道输出：低电平。只有高级定时器需要配置
-	TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCNIdleState_Reset;   //  空闲状态下通道输出：低电平。只有高级定时器需要配置	
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;				    // 输出比较模式，选择PWM模式1
+	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;	    // 通道输出状态：输出使能
+	TIM_OCInitStructure.TIM_OutputNState = TIM_OutputState_Enable;	    // 互补通道输出状态：输出使能。只有高级定时器需要配置
+	TIM_OCInitStructure.TIM_Pulse = 75;								    // 通道CCR值。占空比duty = CCR / (ARR+1) = 25 / (100-1+1) = 25%
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;		    // 通道输出极性，选择为高，若选择极性为低，则输出高低电平取反。
+	TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCPolarity_High;	        // 互补通道输出极性，选择为高，若选择极性为低，则输出高低电平取反。	只有高级定时器需要配置
+	TIM_OCInitStructure.TIM_OCIdleState = TIM_OCNIdleState_Reset;       // 空闲状态下通道输出：低电平。只有高级定时器需要配置
+	TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCNIdleState_Reset;      // 空闲状态下通道输出：低电平。只有高级定时器需要配置	
 	TIM_OC1Init(TIM1, &TIM_OCInitStructure);						//将结构体变量交给TIM_OC1Init，配置TIM1的输出比较通道1
 	
 	/*预装功能*/
