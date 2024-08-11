@@ -3,7 +3,8 @@
 #include "OLED.h"
 #include "MyDMA.h"
 
-uint8_t aa = 0x66;				
+//uint8_t aa = 0x66;
+const uint8_t aa = 0x66;				
 
 int main(void)
 {
@@ -18,7 +19,6 @@ int main(void)
 	OLED_ShowHexNum(1, 7, aa, 2);             // OLED显示  aa:0x66
 	OLED_ShowHexNum(2, 7, (uint32_t)&aa, 8);  // OLED显示 &aa:0x20000000
 	
-		
 	while (1)
 	{
 	}
