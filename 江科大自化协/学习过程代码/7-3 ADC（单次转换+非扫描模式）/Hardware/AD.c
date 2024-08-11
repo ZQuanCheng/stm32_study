@@ -55,5 +55,6 @@ uint16_t AD_GetValue(void)
 	//ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 1, ADC_SampleTime_55Cycles5);	//在每次转换前，根据函数形参灵活更改规则组的通道1
 	ADC_SoftwareStartConvCmd(ADC1, ENABLE);					//软件触发AD转换一次
 	while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);	//等待EOC标志位，即等待AD转换结束
+	//ADC_ClearFlag(ADC1, ADC_FLAG_EOC);                    //其实这里不用软件清除，当我们读取ADC_DR数据寄存器时，EOC由硬件自动清0。
 	return ADC_GetConversionValue(ADC1);					//读数据寄存器，得到AD转换的结果
 }
