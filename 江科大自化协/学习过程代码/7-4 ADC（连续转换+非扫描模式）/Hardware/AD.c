@@ -54,5 +54,12 @@ void AD_Init(void)
   */
 uint16_t AD_GetValue(void)
 {
+	/* 
+	   软件触发只需要一次，触发函数挪到初始化函数的最后
+       这时候，内部ADC会一次接一次，连续不断地对指定通道IN0进行转换，转换结果放在数据寄存器ADC_DR中。
+       数据寄存器不断刷新转换结果，不需要判断标志位
+	*/
+	//ADC_SoftwareStartConvCmd(ADC1, ENABLE);					//软件触发AD转换一次
+	//while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);	//等待EOC标志位，即等待AD转换结束
 	return ADC_GetConversionValue(ADC1);					//读数据寄存器，得到AD转换的结果
 }

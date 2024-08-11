@@ -172,7 +172,7 @@
             <UseExternalTool>0</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
-            <Capability>1</Capability>
+            <Capability>0</Capability>
             <DriverSelection>-1</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
@@ -692,6 +692,16 @@
               <FileType>5</FileType>
               <FilePath>.\System\Delay.h</FilePath>
             </File>
+            <File>
+              <FileName>MyDMA.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\System\MyDMA.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyDMA.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\System\MyDMA.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -731,16 +741,6 @@
               <FileName>OLED_Font.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Hardware\OLED_Font.h</FilePath>
-            </File>
-            <File>
-              <FileName>TIM1_6signals.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Hardware\TIM1_6signals.c</FilePath>
-            </File>
-            <File>
-              <FileName>TIM1_6signals.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Hardware\TIM1_6signals.h</FilePath>
             </File>
           </Files>
         </Group>
