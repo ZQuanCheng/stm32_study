@@ -32,6 +32,7 @@ void AD_Init(void)
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 5, ADC_SampleTime_55Cycles5);	//规则组序列5的位置，配置为通道0
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 6, ADC_SampleTime_55Cycles5);	//规则组序列6的位置，配置为通道3
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 7, ADC_SampleTime_55Cycles5);	//规则组序列7的位置，配置为通道6
+    // 这里改变对应顺序也没关系，只是AD转换的前后顺序变化了，响了DMA转运的次序，从而影存储在数组中的顺序发生了变化
 
 	/*ADC初始化*/
 	ADC_InitTypeDef ADC_InitStructure;											//定义结构体变量
@@ -45,7 +46,7 @@ void AD_Init(void)
 	
 	/*DMA初始化*/
 	DMA_InitTypeDef DMA_InitStructure;											//定义结构体变量
-	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&ADC1->DR;				//外设基地址，给定数据寄存器ADC_DR
+	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&ADC1->DR;				//外设基地址，给定数据寄存器ADC_DR。等同于(uint32_t)(&(ADC1->DR))
 	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;	//外设数据宽度，选择半字，对应16为的ADC数据寄存器
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;			//外设地址自增，选择失能，始终以ADC数据寄存器为源
 	DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)AD_Value;					//存储器基地址，给定存放AD转换结果的全局数组AD_Value
@@ -90,7 +91,8 @@ void AD_StartConv(void)
     
 	/* 等待DMA转运完第7个，即最后一个通道的数据 */
 	while (DMA_GetFlagStatus(DMA1_FLAG_TC1) == RESET);	    //等待DMA工作完成
-	
+	// 其实，DMA转运总是在AD转换之后，所以可以只判断DMA转运完成标志位DMA1_FLAG_TC1（一轮转运7个完成后，DMA1_FLAG_TC1置1）
+
 	// while ((ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET) && (DMA_GetFlagStatus(DMA1_FLAG_TC1) == RESET));
 	
 	/* 清除DMA工作完成标志位*/	
