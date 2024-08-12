@@ -24,15 +24,6 @@ void AD_Init(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);				        //将PA0~PA6引脚初始化为模拟输入	
 	
-	/*规则组通道配置*/
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_55Cycles5);	//规则组序列1的位置，配置为通道2
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 2, ADC_SampleTime_55Cycles5);	//规则组序列2的位置，配置为通道5
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 3, ADC_SampleTime_55Cycles5);	//规则组序列3的位置，配置为通道4
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 4, ADC_SampleTime_55Cycles5);	//规则组序列4的位置，配置为通道1
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 5, ADC_SampleTime_55Cycles5);	//规则组序列5的位置，配置为通道0
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 6, ADC_SampleTime_55Cycles5);	//规则组序列6的位置，配置为通道3
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 7, ADC_SampleTime_55Cycles5);	//规则组序列7的位置，配置为通道6
-
 	/*ADC初始化*/
 	ADC_InitTypeDef ADC_InitStructure;											//定义结构体变量
 	ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;							//模式，选择独立模式，即单独使用ADC1
@@ -42,7 +33,16 @@ void AD_Init(void)
 	ADC_InitStructure.ADC_ScanConvMode = ENABLE;								//扫描模式，使能，扫描规则组的序列，扫描数量由ADC_NbrOfChannel确定
 	ADC_InitStructure.ADC_NbrOfChannel = 7;										//通道数，为7，扫描规则组的前7个通道
 	ADC_Init(ADC1, &ADC_InitStructure);											//将结构体变量交给ADC_Init，配置ADC1
-	
+
+	/*规则组通道配置*/
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_55Cycles5);	//规则组序列1的位置，配置为通道2
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 2, ADC_SampleTime_55Cycles5);	//规则组序列2的位置，配置为通道5
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 3, ADC_SampleTime_55Cycles5);	//规则组序列3的位置，配置为通道4
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 4, ADC_SampleTime_55Cycles5);	//规则组序列4的位置，配置为通道1
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 5, ADC_SampleTime_55Cycles5);	//规则组序列5的位置，配置为通道0
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 6, ADC_SampleTime_55Cycles5);	//规则组序列6的位置，配置为通道3
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 7, ADC_SampleTime_55Cycles5);	//规则组序列7的位置，配置为通道6
+
 	/*DMA初始化*/
 	DMA_InitTypeDef DMA_InitStructure;											//定义结构体变量
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&ADC1->DR;				//外设基地址，给定数据寄存器ADC_DR。等同于(uint32_t)(&(ADC1->DR))

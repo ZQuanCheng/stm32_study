@@ -1,4 +1,5 @@
 #include "stm32f10x.h"                  // Device header
+#include "LED.h"
 
 uint16_t AD_Value[7];					//定义用于存放AD转换结果的全局数组
 
@@ -24,16 +25,6 @@ void AD_Init(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);				        //将PA0~PA6引脚初始化为模拟输入	
 	
-	/*规则组通道配置*/
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_55Cycles5);	//规则组序列1的位置，配置为通道2
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 2, ADC_SampleTime_55Cycles5);	//规则组序列2的位置，配置为通道5
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 3, ADC_SampleTime_55Cycles5);	//规则组序列3的位置，配置为通道4
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 4, ADC_SampleTime_55Cycles5);	//规则组序列4的位置，配置为通道1
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 5, ADC_SampleTime_55Cycles5);	//规则组序列5的位置，配置为通道0
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 6, ADC_SampleTime_55Cycles5);	//规则组序列6的位置，配置为通道3
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 7, ADC_SampleTime_55Cycles5);	//规则组序列7的位置，配置为通道6
-    // 这里改变对应顺序也没关系，只是AD转换的前后顺序变化了，响了DMA转运的次序，从而影存储在数组中的顺序发生了变化
-
 	/*ADC初始化*/
 	ADC_InitTypeDef ADC_InitStructure;											//定义结构体变量
 	ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;							//模式，选择独立模式，即单独使用ADC1
@@ -43,6 +34,16 @@ void AD_Init(void)
 	ADC_InitStructure.ADC_ScanConvMode = ENABLE;								//扫描模式，使能，扫描规则组的序列，扫描数量由ADC_NbrOfChannel确定
 	ADC_InitStructure.ADC_NbrOfChannel = 7;										//通道数，为7，扫描规则组的前7个通道
 	ADC_Init(ADC1, &ADC_InitStructure);											//将结构体变量交给ADC_Init，配置ADC1
+	
+	/*规则组通道配置*/
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_55Cycles5);	//规则组序列1的位置，配置为通道2
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 2, ADC_SampleTime_55Cycles5);	//规则组序列2的位置，配置为通道5
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 3, ADC_SampleTime_55Cycles5);	//规则组序列3的位置，配置为通道4
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 4, ADC_SampleTime_55Cycles5);	//规则组序列4的位置，配置为通道1
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 5, ADC_SampleTime_55Cycles5);	//规则组序列5的位置，配置为通道0
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 6, ADC_SampleTime_55Cycles5);	//规则组序列6的位置，配置为通道3
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 7, ADC_SampleTime_55Cycles5);	//规则组序列7的位置，配置为通道6
+    // 这里改变对应顺序也没关系，只是AD转换的前后顺序变化了，响了DMA转运的次序，从而影存储在数组中的顺序发生了变化
 	
 	/*DMA初始化*/
 	DMA_InitTypeDef DMA_InitStructure;											//定义结构体变量
@@ -86,15 +87,30 @@ void AD_StartConv(void)
 	/* 触发AD转换，每个通道转换完，存入数据寄存器ADC_DR，同时触发DMA转运*/
 	ADC_SoftwareStartConvCmd(ADC1, ENABLE);					//软件触发AD转换一次
 	
+	
 	/* 等待第7个通道转换完成，就完了一轮扫描*/
-	while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);	//等待EOC标志位，即等待AD转换结束
+	//while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);	//等待EOC标志位，即等待AD转换结束
+	/*
+	  不知道为什么，如果使用while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);，就会卡在这里。
+	  可能是DMA搬运特别快，while循环一次的时间，EOC从0到1，马上又到0。while循环没捕捉到0到1的时机
+	  此外，每行代码都打断点，用System Viewer windows看时，EOC一直为0，难以捕捉EOC为1的瞬间
+	
+	  可以在仿真Debug中看出来，
+	  也可以通过GPIO输出电平，点亮LED来判断，
+	  * 如果有while，可以看到LED0一直都点不亮，说明卡在While出不去
+	  * 如果注释掉while，就可以看到LED0一直闪烁，说明运行正常
+	*/
+	LED0_ON();
+
     
 	/* 等待DMA转运完第7个，即最后一个通道的数据 */
 	while (DMA_GetFlagStatus(DMA1_FLAG_TC1) == RESET);	    //等待DMA工作完成
-	// 其实，DMA转运总是在AD转换之后，所以可以只判断DMA转运完成标志位DMA1_FLAG_TC1（一轮转运7个完成后，DMA1_FLAG_TC1置1）
+	// 其实，DMA转运总是在AD转换之后，所以可以只判断DMA转运完成标志位DMA1_FLAG_TC1（一轮转运7个完成后，DMA1的ISR寄存器的TCIF1位置1）
 
-	// while ((ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET) && (DMA_GetFlagStatus(DMA1_FLAG_TC1) == RESET));
+	/* 清除EOC标志位*/	
+	// ADC_ClearFlag(ADC1, ADC_FLAG_EOC);   //其实这里不用软件清除，当我们读取ADC_DR数据寄存器时，EOC由硬件自动清0。
+	                                        //DMA搬运也是读取，也会自动将EOC清0
 	
 	/* 清除DMA工作完成标志位*/	
-	DMA_ClearFlag(DMA1_FLAG_TC1);						    //清除工作完成标志位
+	DMA_ClearFlag(DMA1_FLAG_TC1);		//将DMA1的ISR寄存器的TCIF1位清0
 }
