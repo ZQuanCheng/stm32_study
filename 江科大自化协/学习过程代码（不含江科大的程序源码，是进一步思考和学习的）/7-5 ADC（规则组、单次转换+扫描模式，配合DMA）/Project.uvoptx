@@ -171,82 +171,98 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>40</LineNumber>
+          <LineNumber>161</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134221104</Address>
+          <Address>134219072</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\GitHub\stm32_study\姹熺澶ц嚜鍖栧崗\瀛︿範杩囩▼浠ｇ爜\7-5 ADC锛堝崟娆¤浆鎹?鎵弿妯″紡锛岄厤鍚圖MA锛?User\main.c</Filename>
+          <Filename>.\Hardware\AD.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Project\User/main.c\40</Expression>
+          <Expression>\\Project\Hardware/AD.c\161</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>88</LineNumber>
+          <LineNumber>147</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134219018</Address>
+          <Address>134219056</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\GitHub\stm32_study\姹熺澶ц嚜鍖栧崗\瀛︿範杩囩▼浠ｇ爜\7-5 ADC锛堝崟娆¤浆鎹?鎵弿妯″紡锛岄厤鍚圖MA锛?Hardware\AD.c</Filename>
+          <Filename>.\Hardware\AD.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Project\Hardware/AD.c\88</Expression>
+          <Expression>\\Project\Hardware/AD.c\147</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>103</LineNumber>
+          <LineNumber>119</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134219026</Address>
+          <Address>134219034</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\GitHub\stm32_study\姹熺澶ц嚜鍖栧崗\瀛︿範杩囩▼浠ｇ爜\7-5 ADC锛堝崟娆¤浆鎹?鎵弿妯″紡锛岄厤鍚圖MA锛?Hardware\AD.c</Filename>
+          <Filename>.\Hardware\AD.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Project\Hardware/AD.c\103</Expression>
+          <Expression>\\Project\Hardware/AD.c\119</Expression>
         </Bp>
         <Bp>
           <Number>3</Number>
           <Type>0</Type>
-          <LineNumber>107</LineNumber>
+          <LineNumber>123</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134219030</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\GitHub\stm32_study\姹熺澶ц嚜鍖栧崗\瀛︿範杩囩▼浠ｇ爜\7-5 ADC锛堝崟娆¤浆鎹?鎵弿妯″紡锛岄厤鍚圖MA锛?Hardware\AD.c</Filename>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>.\Hardware\AD.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Project\Hardware/AD.c\107</Expression>
+          <Expression></Expression>
         </Bp>
         <Bp>
           <Number>4</Number>
           <Type>0</Type>
-          <LineNumber>115</LineNumber>
+          <LineNumber>151</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134219042</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\GitHub\stm32_study\姹熺澶ц嚜鍖栧崗\瀛︿範杩囩▼浠ｇ爜\7-5 ADC锛堝崟娆¤浆鎹?鎵弿妯″紡锛岄厤鍚圖MA锛?Hardware\AD.c</Filename>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>.\Hardware\AD.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Project\Hardware/AD.c\115</Expression>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>5</Number>
+          <Type>0</Type>
+          <LineNumber>165</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>.\Hardware\AD.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
