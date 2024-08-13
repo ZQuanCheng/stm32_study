@@ -16,7 +16,7 @@ void AD_Init(void)
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);		//开启DMA1的时钟
 	
 	/*设置ADC时钟*/
-	RCC_ADCCLKConfig(RCC_PCLK2_Div6);						//选择时钟6分频，ADCCLK = 72MHz / 6 = 12MHz
+	RCC_ADCCLKConfig(RCC_PCLK2_Div8);						//选择时钟6分频，ADCCLK = 72MHz / 8 = 9MHz，一个ADCCLK周期为1/9us
 	
 	/*GPIO初始化*/
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -63,14 +63,23 @@ void AD_Init(void)
 		      ADC_InjectedChannelConfig  必须在 ADC_InjectedSequencerLengthConfig() 之后调用
 			  去看ADC_InjectedChannelConfig()的源码，就会知道需要提前设置好Injected_length
 	*/
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_55Cycles5);	//规则组序列1的位置，配置为通道2
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 2, ADC_SampleTime_55Cycles5);	//规则组序列2的位置，配置为通道5
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 3, ADC_SampleTime_55Cycles5);	//规则组序列3的位置，配置为通道4
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 4, ADC_SampleTime_55Cycles5);	//规则组序列4的位置，配置为通道1
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 5, ADC_SampleTime_55Cycles5);	//规则组序列5的位置，配置为通道0
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 6, ADC_SampleTime_55Cycles5);	//规则组序列6的位置，配置为通道3
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 7, ADC_SampleTime_55Cycles5);	//规则组序列7的位置，配置为通道6
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_239Cycles5);	//规则组序列1的位置，配置为通道2
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 2, ADC_SampleTime_239Cycles5);	//规则组序列2的位置，配置为通道5
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 3, ADC_SampleTime_239Cycles5);	//规则组序列3的位置，配置为通道4
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 4, ADC_SampleTime_239Cycles5);	//规则组序列4的位置，配置为通道1
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 5, ADC_SampleTime_239Cycles5);	//规则组序列5的位置，配置为通道0
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 6, ADC_SampleTime_239Cycles5);	//规则组序列6的位置，配置为通道3
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 7, ADC_SampleTime_239Cycles5);	//规则组序列7的位置，配置为通道6
     // 这里改变对应顺序也没关系，只是AD转换的前后顺序变化了，响了DMA转运的次序，从而影存储在数组中的顺序发生了变化
+	/*
+	  ADC总转换时间（Convert Time）TCONV=采样时间+12.5个ADC周期
+	  ADC_SampleTime_55Cycles5：239.5 cycles。即采样时间为239.5个ADCCLK周期
+	  则TCONV=239.5+12.5=252个ADCCLK周期 = 252/9us = 28us
+	*/
+	
+	
+	/*复位外设DMA1的通道CH1*/
+	DMA_DeInit(DMA1_Channel1);
 	
 	
 	/*DMA初始化*/
@@ -130,23 +139,26 @@ void AD_StartConv(void)
 	
 	
 	/* 等待第7个通道转换完成，就完了一轮扫描*/
-	//while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);	//等待EOC标志位，即等待AD转换结束
+	//while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);	//等待EOC标志位，即等待AD转换结束
 	/*
-	  如果之前调用了  ADC_ExternalTrigConvCmd(ADC1, ENABLE);，将CR2寄存器的EXTTRIG位置1
-	      * 可能正常while，没问题（不会卡住，LED正常闪烁）
-	      * 也可能出现只能前2次调用AD_StartConv()没问题，第三次调用AD_StartConv()就卡住了		  
-
-      如果之前没有调用ADC_ExternalTrigConvCmd(ADC1, ENABLE);，即CR2寄存器的EXTTRIG位为0
-	      * while无法结束，有问题（卡住，LED一直不亮）
-
-	  不知道为什么，如果使用while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);，就会卡在这里。
-	      * 每行代码都打断点，用System Viewer windows看时，EOC一直为0，难以捕捉EOC为1的瞬间
-	      * 可能是STM32的DMA搬运特别快？while循环一次的时间，EOC从0到1，马上又到0。while循环没捕捉到0到1的时机？
+	  如果想要在这里捕捉EOC从0到1的瞬间（即最后一个通道转换完成之后，自动触发DMA将最后一个通道的数据转运走之前，这之间的时间很短）
+	  要满足两个要求：
+	  一、之前调用了ADC_ExternalTrigConvCmd(ADC1, ENABLE);，将ADC_CR2寄存器的EXTTRIG位置1
+	  二、保证A/D转换的时间TCONV不能太短
+	      如果，RCC_ADCCLKConfig(RCC_PCLK2_Div8);，即选择时钟8分频，ADCCLK = 72MHz / 8 = 9MHz，一个ADCCLK周期为1/9us
+		        ADC_RegularChannelConfig(, , , ADC_SampleTime_239Cycles5);，即采样时间为239.5个ADCCLK周期
+	            则TCONV=239.5+12.5=252个ADCCLK周期 = 252/9us = 28us
+				这样也无法捕捉到EOC从0到1的瞬间的
+		
+		  但是GD32F30x芯片上，只要TCONV能达到10us就可以使用adc_flag_get(ADC0, ADC_FLAG_EOC);
+		        看来还是F3系列的芯片性能更强
+				
+	  一和二，这两个条件缺一不可。
 	  
-	      * 可以在仿真Debug中看出来，
-	      * 也可以通过GPIO输出电平，点亮LED来判断，
-	      * * 如果有while，可以看到LED0一直都点不亮，说明卡在While出不去
-	      * * 如果注释掉while，就可以看到LED0一直闪烁，说明运行正常
+	  纠结这个没意义，因为我们不需要判断EOC置1的时间，DMA搬运走（读取ADC_DR）时，硬件会自动将EOC清0
+	                  即EOC从0到1后，马上又会变为0，高电平时间很短，一个while循环判断捕捉不到也没关系
+					
+	  我们只需要判断DMA是否工作完成就可以了，而且不用考虑A/D转换时间TCONV的限制
 	*/
 	LED0_ON();
 

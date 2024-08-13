@@ -15,7 +15,7 @@ void AD_Init(void)
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);		//开启DMA1的时钟
 	
 	/*设置ADC时钟*/
-	RCC_ADCCLKConfig(RCC_PCLK2_Div6);						//选择时钟6分频，ADCCLK = 72MHz / 6 = 12MHz
+	RCC_ADCCLKConfig(RCC_PCLK2_Div6);						//选择时钟6分频，ADCCLK = 72MHz / 6 = 12MHz，一个ADCCLK周期为1/12us
 	
 	/*GPIO初始化*/
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -69,8 +69,18 @@ void AD_Init(void)
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 5, ADC_SampleTime_55Cycles5);	//规则组序列5的位置，配置为通道0
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 6, ADC_SampleTime_55Cycles5);	//规则组序列6的位置，配置为通道3
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 7, ADC_SampleTime_55Cycles5);	//规则组序列7的位置，配置为通道6
-
-
+    // 这里改变对应顺序也没关系，只是AD转换的前后顺序变化了，响了DMA转运的次序，从而影存储在数组中的顺序发生了变化
+	/*
+	  ADC总转换时间（Convert Time）TCONV=采样时间+12.5个ADC周期
+	  ADC_SampleTime_55Cycles5：55.5 cycles。即采样时间为55.5个ADCCLK周期
+	  则TCONV=55.5+12.5=68个ADCCLK周期 = 68/12us = 5.67us
+	*/
+	
+	
+	/*复位外设DMA1的通道CH1*/
+	DMA_DeInit(DMA1_Channel1);
+	
+	
 	/*DMA初始化*/
 	DMA_InitTypeDef DMA_InitStructure;											//定义结构体变量
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&ADC1->DR;				//外设基地址，给定数据寄存器ADC_DR。等同于(uint32_t)(&(ADC1->DR))
