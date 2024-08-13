@@ -22,9 +22,6 @@ void AD_Init(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);					
 	
-	/*规则组通道配置*/
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_55Cycles5);		//规则组序列1的位置，配置为通道2
-	
 	/*ADC初始化*/
 	ADC_InitTypeDef ADC_InitStructure;											//定义结构体变量
 	ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;							//模式，选择独立模式，即单独使用ADC1
@@ -34,6 +31,12 @@ void AD_Init(void)
 	ADC_InitStructure.ADC_ScanConvMode = DISABLE;								//扫描模式，失能，只转换规则组的序列1这一个位置
 	ADC_InitStructure.ADC_NbrOfChannel = 1;										//通道数，为1，仅在扫描模式下，才需要指定大于1的数，在非扫描模式下，只能是1
 	ADC_Init(ADC1, &ADC_InitStructure);											//将结构体变量交给ADC_Init，配置ADC1
+	
+	/*规则组通道配置*/
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_55Cycles5);		//规则组序列1的位置，配置为通道2
+
+	/*ADC规则组的外部触发：使能或失能*/	
+	ADC_ExternalTrigConvCmd(ADC1, ENABLE);
 	
 	/*ADC使能*/
 	ADC_Cmd(ADC1, ENABLE);									//使能ADC1，ADC开始运行
