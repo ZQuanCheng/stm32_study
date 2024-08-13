@@ -3,7 +3,8 @@
 #include "LED.h"
 #include "OLED.h"
 #include "AD.h"
-#include "TIM_OC.h"
+#include "TIM2_CC1.h"
+#include "TIM1_TRGO.h"
 
 int main(void)
 {
@@ -11,7 +12,31 @@ int main(void)
 	OLED_Init();			//OLED初始化
 	LED_Init(); 			//LED0（贴片LED）初始化
 	AD_Init();				//AD初始化
-	TIM_OC_Init();			//TIM_OC初始化
+	
+	TIM1_TRGO_Init();	
+	/*
+	      如果用TIM1_TRGO，需要配置主模式输出TRGO，但是不需要配置输出比较OC结构体；
+	
+	      需要在AD.c中调用ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T1_TRGO); //（只针对注入组）外部触发源，使用TIM2的TRGO
+	
+		  TIM1的更新周期是1S；在ADC1_2_IRQHandler中翻转LED的电平，看出来确实是1s。
+		  而且数据变动也是1s一次。即使OLED是100s刷新一次
+	*/		
+	
+	// TIM2_CC1_Init();		
+	/*    
+	      如果用TIM2_CC1，需要配置输出比较OC结构体，但是不需要配置主模式输出TRGO；
+	
+	      需要在AD.c中调用ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T2_CC1); //（只针对注入组）外部触发源，使用TIM2的CC1
+	
+		  TIM2的更新周期是5S，那么输出比较触发的频率也是5S；在ADC1_2_IRQHandler中翻转LED的电平，看出来确实是5s。
+		  而且数据变动也是5s一次。即使OLED是100s刷新一次
+	      
+		  此外，我们只需要输出比较事件，来触发ADC转换，不需要实际输出PWM波形
+	      因此，在TIM2_CC1_Init()中，我们没有配置PA0
+	      最重要的是，PA0用于ADC12_IN0的模拟输入了，不能再用于TIM2_CH1的输出PWM		  	  
+	*/	
+	
 	
 	LED0_ON();
 		
@@ -21,11 +46,7 @@ int main(void)
 	OLED_ShowString(3, 1, "AD2:");
 	OLED_ShowString(4, 1, "AD3:");
 	
-	/*
-		  TIM2的更新周期是5S，那么输出比较触发的频率也是5S，
-		  在ADC1_2_IRQHandler中翻转LED的电平，看出来确实是5s。
-		  而且数据变动也是5s一次。即使OLED是100s刷新一次
-	*/	
+
 	
 	while (1)
 	{	
@@ -59,9 +80,9 @@ void ADC1_2_IRQHandler(void)
 		
 		LED0_Turn();  // 翻转LED，指示进入中断的频率
 		/*
-		  TIM2的更新周期是5S，那么输出比较触发的频率也是5S，
-		  在ADC1_2_IRQHandler中翻转LED的电平，看出来确实是5s。
-		  而且数据变动也是5s一次。即使OLED是100s刷新一次
+		  TIM2的更新周期是1S，那么输出比较触发的频率也是1S，
+		  在ADC1_2_IRQHandler中翻转LED的电平，看出来确实是1s。
+		  而且数据变动也是1s一次。即使OLED是100ms刷新一次
 		*/
 		
 		/* 读取ADC注入组的数据寄存器JDRx */

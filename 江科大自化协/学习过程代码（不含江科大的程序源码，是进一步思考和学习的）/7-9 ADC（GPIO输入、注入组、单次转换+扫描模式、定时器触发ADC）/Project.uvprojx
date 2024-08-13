@@ -743,14 +743,24 @@
               <FilePath>.\Hardware\AD.h</FilePath>
             </File>
             <File>
-              <FileName>TIM_OC.c</FileName>
+              <FileName>TIM2_CC1.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Hardware\TIM_OC.c</FilePath>
+              <FilePath>.\Hardware\TIM2_CC1.c</FilePath>
             </File>
             <File>
-              <FileName>TIM_OC.h</FileName>
+              <FileName>TIM2_CC1.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Hardware\TIM_OC.h</FilePath>
+              <FilePath>.\Hardware\TIM2_CC1.h</FilePath>
+            </File>
+            <File>
+              <FileName>TIM1_TRGO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\TIM1_TRGO.c</FilePath>
+            </File>
+            <File>
+              <FileName>TIM1_TRGO.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\TIM1_TRGO.h</FilePath>
             </File>
           </Files>
         </Group>

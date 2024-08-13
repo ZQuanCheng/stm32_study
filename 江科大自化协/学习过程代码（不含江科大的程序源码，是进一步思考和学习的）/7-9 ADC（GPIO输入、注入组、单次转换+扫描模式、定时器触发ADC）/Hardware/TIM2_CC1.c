@@ -1,16 +1,20 @@
 #include "stm32f10x.h"                  // Device header
 
 /**
-  * 函    数：TIM_OC初始化
+  * 函    数：TIM2_CC1初始化
   * 参    数：无
   * 返 回 值：无
   */
-void TIM_OC_Init(void)
+void TIM2_CC1_Init(void)
 {
 	/*
        这里，TIM2仅用于产生输出比较事件（寄存器ADC_CR2的位域JEXTSEL[2:0]=011，即定时器2的CC1事件）
 	   由于只有输出比较（CNT自增到ARR时）才触发一次ADC转换。
 	   因此ADC转换的触发频率，和TIM2的更新频率一致，都是0.2Hz，即周期为5s。
+	
+	   此外，我们只需要输出比较事件，来触发ADC转换，不需要实际输出PWM波形
+	   因此，这里我们没有配置PA0
+	   最重要的是，PA0用于ADC12_IN0的模拟输入了，不能再用于TIM2_CH1的输出PWM		
 	*/
 	
 	/*开启时钟*/

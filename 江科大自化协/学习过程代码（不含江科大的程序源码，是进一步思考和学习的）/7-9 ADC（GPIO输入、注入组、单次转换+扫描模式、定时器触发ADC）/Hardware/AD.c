@@ -45,7 +45,18 @@ void AD_Init(void)
 	  	如果注入组需要配置外部触发源，就得使用ADC_ExternalTrigInjectedConvConfig()（包括设置软件触发，即参数ADC_ExternalTrigInjecConv_None）
 	*/
 	ADC_InjectedSequencerLengthConfig(ADC1, 4); 							    //（只针对注入组）通道数，为4，扫描规则组的前4个通道
-	ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T2_CC1); //（只针对注入组）外部触发源，使用TIM2的CC1
+	
+	
+	/*ADC注入组的外部触发源
+	
+	  如果用TIM1_TRGO，需要配置主模式输出TRGO，但是不需要配置输出比较OC结构体；
+	  需要在AD.c中调用ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T1_TRGO); //（只针对注入组）外部触发源，使用TIM1的TRGO	
+	
+	  如果用TIM2_CC1，需要配置输出比较OC结构体，但是不需要配置主模式输出TRGO；
+	  需要在AD.c中调用ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T2_CC1); //（只针对注入组）外部触发源，使用TIM2的CC1
+    */
+	ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T1_TRGO); //（只针对注入组）外部触发源，使用TIM1的TRGO		
+	// ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T2_CC1); //（只针对注入组）外部触发源，使用TIM2的CC1
 	
 	
 	/*ADC规则组/注入组通道配置
