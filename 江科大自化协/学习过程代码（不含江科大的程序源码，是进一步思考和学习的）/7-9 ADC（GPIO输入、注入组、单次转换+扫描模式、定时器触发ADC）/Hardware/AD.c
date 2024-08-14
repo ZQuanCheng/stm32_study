@@ -55,7 +55,7 @@ void AD_Init(void)
 	  如果用TIM2_CC1，需要配置输出比较OC结构体，但是不需要配置主模式输出TRGO；
 	  需要在AD.c中调用ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T2_CC1); //（只针对注入组）外部触发源，使用TIM2的CC1
     */
-	ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T1_TRGO); //（只针对注入组）外部触发源，使用TIM1的TRGO		
+	// ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T1_TRGO); //（只针对注入组）外部触发源，使用TIM1的TRGO		
 	// ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T2_CC1); //（只针对注入组）外部触发源，使用TIM2的CC1
 	
 	

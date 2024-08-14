@@ -14,20 +14,22 @@ int main(void)
 	AD_Init();				//AD初始化
 	
 	TIM1_TRGO_Init();	
+	ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T1_TRGO); //（只针对注入组）外部触发源，使用TIM1的TRGO
 	/*
 	      如果用TIM1_TRGO，需要配置主模式输出TRGO，但是不需要配置输出比较OC结构体；
 	
-	      需要在AD.c中调用ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T1_TRGO); //（只针对注入组）外部触发源，使用TIM2的TRGO
+	      需要在AD.c中调用，或在main.c中调用 ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T1_TRGO); 
 	
 		  TIM1的更新周期是1S；在ADC1_2_IRQHandler中翻转LED的电平，看出来确实是1s。
 		  而且数据变动也是1s一次。即使OLED是100s刷新一次
 	*/		
 	
-	// TIM2_CC1_Init();		
+	// TIM2_CC1_Init();
+    // ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T2_CC1); //（只针对注入组）外部触发源，使用TIM2的CC1	
 	/*    
 	      如果用TIM2_CC1，需要配置输出比较OC结构体，但是不需要配置主模式输出TRGO；
 	
-	      需要在AD.c中调用ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T2_CC1); //（只针对注入组）外部触发源，使用TIM2的CC1
+	      需要在AD.c中调用，或在main.c中调用 ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_T2_CC1); 
 	
 		  TIM2的更新周期是5S，那么输出比较触发的频率也是5S；在ADC1_2_IRQHandler中翻转LED的电平，看出来确实是5s。
 		  而且数据变动也是5s一次。即使OLED是100s刷新一次
