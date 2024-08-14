@@ -98,8 +98,9 @@ void AD_Init(void)
 	ADC_ClearITPendingBit(ADC1, ADC_IT_EOC);	
 	ADC_ClearITPendingBit(ADC1, ADC_IT_JEOC);	             
 	
-	/*开启ADC的中断*/					
-    ADC_ITConfig(ADC1, ADC_IT_JEOC, ENABLE); // 使能ADC的JEOC中断（注入组A/D转换结束）
+	/*开启ADC的中断*/	
+    ADC_ITConfig(ADC1, ADC_IT_EOC, ENABLE);  // 使能ADC的EOC中断 （规则组或注入组 A/D转换结束）	
+    ADC_ITConfig(ADC1, ADC_IT_JEOC, ENABLE); // 使能ADC的JEOC中断（        注入组 A/D转换结束）
 
 
 	/*NVIC中断分组*/

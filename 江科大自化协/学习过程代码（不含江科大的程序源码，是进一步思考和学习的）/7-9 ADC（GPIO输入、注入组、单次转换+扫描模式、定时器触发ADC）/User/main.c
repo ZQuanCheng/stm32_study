@@ -73,7 +73,14 @@ int main(void)
   */
 void ADC1_2_IRQHandler(void)
 {
-	if (ADC_GetITStatus(ADC1, ADC_IT_JEOC) == SET)          //判断是否是ADC1中的JEOC注入组转换结束触发的中断
+	/*
+	  如果在AD.c中，有ADC_ITConfig(ADC1, ADC_IT_EOC, ENABLE);， 则使用if (ADC_GetITStatus(ADC1, ADC_IT_EOC) == SET)
+	  如果在AD.c中，有ADC_ITConfig(ADC1, ADC_IT_JEOC, ENABLE);，则使用if (ADC_GetITStatus(ADC1, ADC_IT_JEOC) == SET)	
+	  当然，由于我们在AD.c中，JEOC和EOC的中断都使能了，都可以触发ADC全局中断ADC1_2_IRQHandler
+	  这里，用哪个判断都可以
+	*/
+	//if (ADC_GetITStatus(ADC1, ADC_IT_EOC) == SET)         //判断是否是ADC1中的EOC（规则组或注入组转换结束）触发的中断	
+	if (ADC_GetITStatus(ADC1, ADC_IT_JEOC) == SET)          //判断是否是ADC1中的JEOC（注入组转换结束）触发的中断
 	{
 		ADC_ClearITPendingBit(ADC1, ADC_IT_EOC);
 		ADC_ClearITPendingBit(ADC1, ADC_IT_JEOC);			//清除ADC1中的JEOC注入组转换结束事件的中断标志位
