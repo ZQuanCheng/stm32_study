@@ -7,6 +7,12 @@
   */
 void TIM1_TRGO_Init(void)
 {
+	/*
+       这里，TIM1仅用于产生更新事件（寄存器ADC_CR2的位域JEXTSEL[2:0]=000，即定时器1的TRGO事件）
+	   由于只有计数器更新（CNT的值自增到和ARR的值相同时）才触发一次ADC转换。
+	   因此ADC转换的触发频率，和TIM2的更新频率一致，都是1Hz，即周期为1s。		
+	*/
+	
 	/*开启时钟*/
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);			//开启TIM1的时钟																	
 	

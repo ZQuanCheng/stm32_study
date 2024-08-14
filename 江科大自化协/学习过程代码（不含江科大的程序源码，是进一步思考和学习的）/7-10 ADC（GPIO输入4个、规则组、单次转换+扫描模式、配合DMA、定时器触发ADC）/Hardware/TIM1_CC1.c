@@ -9,7 +9,7 @@ void TIM1_CC1_Init(void)
 {
 	/*
        这里，TIM1仅用于产生输出比较事件（寄存器ADC_CR2的位域EXTSEL[2:0]=000，即定时器1的CC1事件）
-	   由于只有输出比较（CNT自增到ARR时）才触发一次ADC转换。
+	   由于只有输出比较（CNT的值自增到和CCR的值相同时）才触发一次ADC转换。
 	   因此ADC转换的触发频率，和TIM1的更新频率一致，都是0.2Hz，即周期为5s。
 	
 	   此外，我们只需要输出比较事件，来触发ADC转换，不需要实际输出PWM波形
@@ -70,7 +70,16 @@ void TIM1_CC1_Init(void)
 
     /*使能TIM1的主输出*/
 	TIM_CtrlPWMOutputs(TIM1, ENABLE);  // 只有高级定时器需要TIM_CtrlPWMOutputs()，将所有的输出通道使能或者失能
-	
+	/*
+	  这句话不能少，即使我们不需要将PWM输出体现到GPIO口（没配置），也需要这句话
+          TIM_CtrlPWMOutputs()用于配置高级定时器的TIM_BDTR寄存器的MOE位
+	  根据《STM32参考手册 13.4.18 TIM1 和TIM8 刹车和死区寄存器(TIMx_BDTR) 》
+          只有MOE置1，才能开启开启OC和OCN输出
+	  根据《STM32参考手册 13.4.9 TIM1 和TIM8 捕获/比较使能寄存器(TIMx_CCER)》的《表75》
+          MOE=1是OCx和OCNx输出的大前提，
+          当然，除了MOE=1外，具体的输出状态，还和OSSI、 OSSR、 OIS1、 OISxN、CCxE、CCxNE等位的值有关
+	*/
+
 
 	/*ARR预装功能*/
 	// 用于配置ARR自动重装寄存器的预装功能的，即影子寄存器。写入的值不会立即生效，而是在更新事件才会生效，一般不用。
