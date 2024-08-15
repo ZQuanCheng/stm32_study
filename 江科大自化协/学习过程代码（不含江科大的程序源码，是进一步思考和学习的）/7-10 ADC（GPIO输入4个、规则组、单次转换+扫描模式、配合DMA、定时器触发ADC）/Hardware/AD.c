@@ -49,7 +49,7 @@ void AD_Init(void)
 	*/
 	
 	
-	/*ADC注入组的外部触发源
+	/*ADC规则组的外部触发源
 	
 	  如果用TIM3_TRGO，需要配置主模式输出TRGO，但是不需要配置输出比较OC结构体；
 	  需要在AD.c中设置结构体的成员 ADC_ExternalTrigConv = ADC_ExternalTrigConv_T3_TRGO;		//（只针对规则组）外部触发源，使用TIM3的TRGO	

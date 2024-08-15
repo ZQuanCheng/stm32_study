@@ -96,7 +96,15 @@ void ADC1_2_IRQHandler(void)
 	    由于DMA很快，EOC高电平实际很短，难以捕捉，所以无法触发ADC的全局中断
 		如果想要在中断函数里翻转LED电平来指示ADC的运行状态，可以使用DMA的全局中断来翻转LED电平
 	*/
-
+	
+/**
+  * 函    数：DMA1_Channel1中断函数
+  * 参    数：无
+  * 返 回 值：无
+  * 注意事项：此函数为中断函数，无需调用，中断触发后自动执行
+  *           函数名为预留的指定名称，可以从启动文件复制
+  *           请确保函数名正确，不能有任何差异，否则中断函数将不能进入
+  */
 void DMA1_Channel1_IRQHandler(void)
 {
 	if (DMA_GetITStatus(DMA1_IT_TC1) == SET)                //判断是否是DMA1_CH1的TC（转运完成 transfer complete）触发的中断
