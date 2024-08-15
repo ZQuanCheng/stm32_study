@@ -31,8 +31,8 @@ void AD_Init(void)
 	ADC_InitStructure.ADC_Mode = ADC_Mode_Independent;							//模式，选择独立模式，即单独使用ADC1
 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;						//数据对齐，选择右对齐
 	//ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T2_CC2;		//（只针对规则组）外部触发源，使用TIM2的CC2
-	ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;							//连续转换，失能，每转换一次规则组序列后停止
-	ADC_InitStructure.ADC_ScanConvMode = ENABLE;								//扫描模式，使能，扫描规则组的序列，扫描数量由ADC_NbrOfChannel确定
+	ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;							//连续转换，失能，每转换一次注入组序列后停止
+	ADC_InitStructure.ADC_ScanConvMode = ENABLE;								//扫描模式，使能，扫描注入组的序列，扫描数量由ADC_NbrOfChannel确定
 	//ADC_InitStructure.ADC_NbrOfChannel = 4;									//（只针对规则组）通道数，为4，扫描规则组的前2个通道
 	ADC_Init(ADC1, &ADC_InitStructure);											//将结构体变量交给ADC_Init，配置ADC1
 	/*

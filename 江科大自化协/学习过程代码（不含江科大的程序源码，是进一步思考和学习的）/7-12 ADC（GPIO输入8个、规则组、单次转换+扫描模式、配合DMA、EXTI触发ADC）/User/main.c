@@ -5,6 +5,8 @@
 #include "AD.h"
 #include "EXTI_11.h"
 
+uint16_t dma_it_num;   // 记录进入DMA全局中断的次数
+
 int main(void)
 {
 	/*模块初始化*/
@@ -122,6 +124,10 @@ void DMA1_Channel1_IRQHandler(void)
 		  在DMA1_Channel1_IRQHandler中翻转LED的电平，看出来确实是1s。
 		  而且数据变动也是1s一次。即使OLED是100ms刷新一次
 		*/
+		
+		
+		dma_it_num++;   // 记录进入DMA全局中断的次数
+
 		
 	    /* 清除EOC、JEOC标志位 */
 	    // ADC_ClearFlag(ADC1, ADC_FLAG_JEOC); 	
