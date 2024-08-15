@@ -92,6 +92,84 @@
 
 
 
+7-12 ADC（GPIO输入8个、规则组、单次转换+扫描模式、配合DMA、EXTI触发ADC）
+                  AD.C：ADC1、规则组、单次转换、扫描模式（需要DMA）。可使用PA0-PA7.
+                             外部触发源可以在AD.c中的结构体成员ADC_ExternalTrigConv中配置。
+                             由于规则组的EXTI触发源只有EXTI_11线，所以将外部中断EXTI_11号线映射到PA11（或PB11）
+                             为了提供上升沿，将按键Key连接到PA11（一端接PA11，另一端接VCC）。这样，按下Key时，就会给PA11一个上升沿，从而顺利触发一次ADC
+                             在这里，即使使能了ADC的EOC中断，也无法触发ADC的全局中断。因为DMA很快，EOC高电平时间很短，难以捕捉，所以无法触发ADC的全局中断
+                             如果想要在中断中翻转LED电平来指示ADC的运行状态，只能使用DMA的全局中断来翻转LED电平
+                             所以，这里使能了DMA1_CH1的FTF中断
+
+                            注意，如果不使用Key按键来给PA11上升沿，可以直接用杜邦线连接VCC，那么当拔走VCC时（想要给下降沿），可能也会触发一次。
+                            因为抖动，又没有滤波电容，电压波动也会有小的上升沿
+
+                  EXTl_11.0：EXTl_11，需要配置EXTL_11外部中断线为事件模式（注意，不是中断模式。这里EXTL_11仅作为事件，来触发ADC）；
+
+                  main.c：EXTl_11_Init(); 和 ADC_ExternalTrigConv = ADC_ExternalTrigConv_Ext_IT11_TIM8_TRGO;
+                               * EXTI_11进行外部硬件触发转换
+                               * ADC1转换完成时，DMA也会马上转运完成，会触发DMA全局中断，我们在中断函数DMA1_Channel1_IRQHandler中进行LED电平翻转
+                               * Oled显示AD值
+
+
+
+7-13 ADC（GPIO输入8个、规则组、单次转换+间断模式、配合DMA、EXTI触发ADC）
+                  AD.C：ADC1、规则组、单次转换、间断模式（需要DMA） 。 可使用PA0-PA7.
+                             只需要在上一个程序7-12的基础上。① 加一句ADC_DiscModeChannelCountConfig(ADC1, 3); ② 加一句ADC_DiscModeCmd(ADC1, ENABLE);
+                            这里，由于是间断模式，① 非扫描模式DISABLE ② 扫描模式ENABLE，这两种没有区别，不影响间断模式的执行。
+                            需要按下3次按键，才能触发3次ADC转换（第1次，转换序列1、2、3；第2次，转换序列4、5、6；第3次，转换序列7，8；EOC置1, DMA转运完成、触发DMA中断）
+                            即Key按下3次，才能翻转一次LED电平
+
+
+
+7-14 ADC（GPIO输入4个、注入组、单次转换+扫描模式、EXTI触发ADC）
+                  AD.C：ADC1、注入组、单次转换、扫描模式（不需要DMA）。可使用PA0-PA3.
+                             外部触发源可以在AD.c中的ADC_ExternalTrigInjectedConvConfig()库函数中配置。
+                             由于注入组的EXTI触发源只有EXTI_15线，所以将外部中断EXTI_15号线映射到PB15（或PA15）
+                             为了提供上升沿，将按键Key连接到PB15（一端接PB15，另一端接VCC）。这样，按下Key时，就会给PB15一个上升沿，从而顺利触发一次ADC
+                             此外，使能了ADC的JEOC中断。
+
+                            注意，如果不使用Key按键来给PB15上升沿，可以直接用杜邦线连接VCC，那么当拔走VCC时（想要给下降沿），可能也会触发一次。
+                            因为抖动，又没有滤波电容，电压波动也会有小的上升沿
+
+                  EXTl_15.0：EXTl_15，需要配置EXTL_15外部中断线为事件模式（注意，不是中断模式。这里EXTL_15仅作为事件，来触发ADC）；
+
+                  main.c：EXTl_15_Init(); 和 ADC_ExternalTrigInjectedConvConfig(ADC1, ADC_ExternalTrigInjecConv_Ext_IT15_TIM8_CC4);
+                               * EXTI_15进行外部硬件触发转换
+                               * ADC1转换完成后，会触发ADC全局中断，我们在中断函数ADC1_2_IRQHandler中进行LED电平翻转、ADC1_JDRx(x=1,2,3,4)的数据
+                               * Oled显示AD值
+
+
+
+7-15 ADC（GPIO输入4个、注入组、单次转换+间断模式、EXTI触发ADC）
+                  AD.C：ADC1、注入组、单次转换、间断模式（不需要DMA） 。 可使用PA0-PA3.
+                             只需要在上一个程序7-14的基础上。加一句ADC_InjectedDiscModeCmd(ADC1, ENABLE);
+                            这里，由于是间断模式，① 非扫描模式DISABLE ② 扫描模式ENABLE，这两种没有区别，不影响间断模式的执行。
+                            需要按下4次按键，才能触发4次ADC转换（第1次，转换序列1；第2次，转换序列2；第3次，转换序列3；第4次，转换序列4；EOC置1, 触发ADC中断）
+                            即Key按下4次，才能翻转一次LED电平
+
+                            注意，由于没有DMA实时搬运，在Debug的Watch窗口中，会在第4次按下时统一更新到AD_Value数据中。
+                            如果想实时看，就打开System Viewer Windows，看ADC1的JDRx(x=1,2,3,4)注入组数据寄存器，更新顺序与按键按下一致
+
+                            注意，STM32上一个特别现象，估计是IC硬件问题:
+                            * 扫描模式、按下4次按键:（第1次，转换序列1；第2次，转换序列2；第3次，转换序列3；第4次，转换序列4；EOC置1, 触发ADC中断）
+                            * 非扫描模式、按下4次按键:（上来就将转换序列1转换了，触发了一次ADC中断。然后第1次，转换序列2；第2次，转换序列3；第3次，转换序列4；第4次，转换序列1；EOC置1, 触发ADC中断）
+                            即非扫描模式+间断模式，出现了一种类似bug的现象。这种现象在GD32F303上没有出现。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
