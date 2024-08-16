@@ -30,16 +30,21 @@ int main(void)
 		
 	/*显示静态字符串*/
 	OLED_ShowString(1, 1, "AD0:");
-	OLED_ShowString(2, 1, "AD1:");
-	
+	OLED_ShowString(2, 1, "IN0_1:");
+	OLED_ShowString(3, 1, "AD1:");
+	OLED_ShowString(4, 1, "IN1_0:");	
 
 	
 	while (1)
 	{	
-		//LED0_Turn();
+		OLED_ShowHexNum(1, 5,  AD_Value[0],                   8);	//显示转换结果第0个数据
+		OLED_ShowHexNum(2, 7,  (uint16_t)(AD_Value[0]),       4);	//第0个数据拆分出ADC1(低16bit)，ADC1_IN0（PA0）
+		OLED_ShowHexNum(2, 12, (uint16_t)(AD_Value[0] >> 16), 4);	//第0个数据拆分出ADC2(高16bit)，ADC2_IN1（PA1）	
 		
-		OLED_ShowNum(1, 5, AD_Value[0], 8);		//显示转换结果第0个数据
-		OLED_ShowNum(2, 5, AD_Value[1], 8);		//显示转换结果第1个数据	
+		OLED_ShowHexNum(3, 5,  AD_Value[1],                   8);	//显示转换结果第1个数据
+		OLED_ShowHexNum(4, 7,  (uint16_t)(AD_Value[1]),       4);	//第1个数据拆分出ADC1(低16bit)，ADC1_IN1（PA1）
+		OLED_ShowHexNum(4, 12, (uint16_t)(AD_Value[1] >> 16), 4);	//第1个数据拆分出ADC2(高16bit)，ADC2_IN0（PA0）			
+		
 		
 		Delay_ms(100);			//延时100ms，手动增加一些转换的间隔时间
 	}
