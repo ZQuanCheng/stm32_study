@@ -138,7 +138,7 @@ void TIM1_deadtime_break_0_Init(void)
 	// 用于配置ARR自动重装寄存器的预装功能的，即影子寄存器。写入的值不会立即生效，而是在更新事件才会生效，一般不用。
 	// GD32中对应的是ACR寄存器，代码为timer_auto_reload_shadow_enable(TIMER0);
 	// STM32中是下列代码
-    TIM_ARRPreloadConfig(TIM1, ENABLE);	// 这里是Disable，不使用CCR1上的影子寄存器
+    TIM_ARRPreloadConfig(TIM1, ENABLE);	// 这里是Disable，不使用ARR上的影子寄存器
 		
 		
 	/*TIM使能*/
@@ -284,7 +284,7 @@ void TIM1_deadtime_break_1_Init(void)
 	// 用于配置ARR自动重装寄存器的预装功能的，即影子寄存器。写入的值不会立即生效，而是在更新事件才会生效，一般不用。
 	// GD32中对应的是ACR寄存器，代码为timer_auto_reload_shadow_enable(TIMER0);
 	// STM32中是下列代码
-    TIM_ARRPreloadConfig(TIM1, ENABLE);	// 这里是Disable，不使用CCR1上的影子寄存器
+    TIM_ARRPreloadConfig(TIM1, ENABLE);	// 这里是Disable，不使用ARR上的影子寄存器
 		
 		
 	/*TIM使能*/
@@ -432,7 +432,7 @@ void TIM1_deadtime_break_2_Init(void)
 	// 用于配置ARR自动重装寄存器的预装功能的，即影子寄存器。写入的值不会立即生效，而是在更新事件才会生效，一般不用。
 	// GD32中对应的是ACR寄存器，代码为timer_auto_reload_shadow_enable(TIMER0);
 	// STM32中是下列代码
-    TIM_ARRPreloadConfig(TIM1, ENABLE);	// 这里是Disable，不使用CCR1上的影子寄存器
+    TIM_ARRPreloadConfig(TIM1, ENABLE);	// 这里是Disable，不使用ARR上的影子寄存器
 		
 		
 	/*TIM使能*/
@@ -581,7 +581,7 @@ void TIM1_deadtime_break_3_Init(void)
 	// 用于配置ARR自动重装寄存器的预装功能的，即影子寄存器。写入的值不会立即生效，而是在更新事件才会生效，一般不用。
 	// GD32中对应的是ACR寄存器，代码为timer_auto_reload_shadow_enable(TIMER0);
 	// STM32中是下列代码
-    TIM_ARRPreloadConfig(TIM1, ENABLE);	// 这里是Disable，不使用CCR1上的影子寄存器
+    TIM_ARRPreloadConfig(TIM1, ENABLE);	// 这里是Disable，不使用ARR上的影子寄存器
 		
 		
 	/*TIM使能*/
@@ -727,7 +727,7 @@ void TIM1_deadtime_break_4_Init(void)
 	// 用于配置ARR自动重装寄存器的预装功能的，即影子寄存器。写入的值不会立即生效，而是在更新事件才会生效，一般不用。
 	// GD32中对应的是ACR寄存器，代码为timer_auto_reload_shadow_enable(TIMER0);
 	// STM32中是下列代码
-    TIM_ARRPreloadConfig(TIM1, ENABLE);	// 这里是Disable，不使用CCR1上的影子寄存器
+    TIM_ARRPreloadConfig(TIM1, ENABLE);	// 这里是Disable，不使用ARR上的影子寄存器
 		
 		
 	/*TIM使能*/

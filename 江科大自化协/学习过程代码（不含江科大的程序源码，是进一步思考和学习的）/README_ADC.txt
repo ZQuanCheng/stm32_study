@@ -159,6 +159,31 @@
 
 
 
+7-16 ADC（GPIO输入2个、规则组、单次转换+扫描模式、配合DMA、定时器触发ADC）
+                  AD.C：ADC1、规则组、单次转换、扫描模式（需要DMA）。可使用PA0-PA1。
+                             (在7-10的AD.c基础上修改)
+                             GPIO配置：PA0~PA3，改成PA0-PA1。
+                             外部触发源：TIM1_CC1，改成TIM2_CC2。
+                             扫描通道数：4，改成2。
+                             规则组序列：序列0~3，改成序列0~1。
+                             DMA转运次数buffer：4，改成2。
+                             DMA数据宽度：半字16bit，改成字32bit
+                             数组：uint16_t AD_Value[4];   改成  uint32_t AD_Value[2];
+
+
+                  TIM2_CC2.c：如果用TIM2_CC2，需要配置输出比较OC结构体，但是不需要配置主模式输出TRGO;
+                             (在7-10的TIM1_CC1.c基础上修改)
+                             时钟：APB2-TIM1、改成APB1-TIM2
+                             ARR值：50000改成10000，保证定时周期为1s。(对应的，CCR的值改为5000,，反正1~9999都行)
+                             PWM模式：模式1，改成模式2。(这个倒是无所谓，不影响效果)
+
+
+                  main.c：选择TIM2_CC2_Init();    和  ADC_ExternalTrigConv = ADC_ExternalTrigConv_T2_CC2;
+                                * 记得修改OLED显示长度：4改成8
+                                * 定时器TIM2进行外部硬件触发转换
+                                * ADC1转换完成时，DMA也会马上转运完成，会触发DMA全局中断，我们在中断函数DMA1_Channel1_IRQHandler()中进行LED电平翻转
+                                * Oled显示AD值
+
 
 
 
