@@ -15,6 +15,7 @@ int main(void)
 	TIM3_PWM_Init();	//TIM3-CH1-PA6。频率2kHz、占空比50%
 	//TIM1_PWM_Init();	//TIM1-CH1-PA8。频率10kHz、占空比50%
 	
+	//只需要使用软件触发来启动主定时器TIM2，TIM3由TIM2的TRGO触发启动
 	TIM_Cmd(TIM2, ENABLE);
 	
 	IC_Init();		    //输入捕获初始化，测量TIM2和TIM3级联（注释掉TIM1_PWM_Init()和TIM_Cmd()），时用TIM1-CH1-PA8输入捕获。
