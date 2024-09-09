@@ -57,7 +57,7 @@ void Hall_Init(void)
 																	//则最好执行此函数，给结构体所有成员都赋一个默认值
 																	//避免结构体初值不确定的问题
 	TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;				      //选择配置定时器通道1
-	TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;	          //极性：选择为上升沿触发捕获。注意此时参数的Rising和Falling已经不代表上升沿和下降沿了，而是代表是否反相
+	TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;	          //是否反相：选择为不反相。注意此时参数的Rising和Falling已经不代表上升沿和下降沿了，而是代表是否反相
 	TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_TRC;            //输入信号：选择TRC。TI1的跳变沿TI1F_ED会接通TRC。
 	TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;				  //捕获预分频：选择不分频，每次信号都触发捕获
 	TIM_ICInitStructure.TIM_ICFilter = 0xF;							      //输入滤波器参数：可以过滤信号抖动
@@ -65,17 +65,6 @@ void Hall_Init(void)
     // 三个输入通过异或门，只反映在输入捕获通道1上。
 	
 	
-    /*自动预装功能：使能*/
-	// TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);  // 使能或者失能TIMx在CCR1上的预装载寄存器
-	                                                      // 仅用于输出比较
-														  
-	/*正交编码器接口配置*/
-	// TIM_EncoderInterfaceConfig(TIM2, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising, TIM_ICPolarity_Rising);
-																	//配置编码器模式以及两个输入通道是否反相
-																	//注意此时参数的Rising和Falling已经不代表上升沿和下降沿了，而是代表是否反相
-																	//此函数必须在输入捕获初始化之后进行，否则输入捕获的配置会覆盖此函数的部分配置
-     
-		 
 	/*TIMx霍尔传感器接口配置：使能*/
     TIM_SelectHallSensor(TIM2, ENABLE);        // 选择TIMx_CH1、CH2、CH3引脚异或的结果作为通道1的触发输入TI1
 	 

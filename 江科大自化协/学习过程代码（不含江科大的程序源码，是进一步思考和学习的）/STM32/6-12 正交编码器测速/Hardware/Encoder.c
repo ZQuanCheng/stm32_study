@@ -50,7 +50,7 @@ void Encoder_Init(void)
 																	//则最好执行此函数，给结构体所有成员都赋一个默认值
 																	//避免结构体初值不确定的问题
 	TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;				      //选择配置定时器通道1
-	TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;	          //极性：选择为上升沿触发捕获。后续TIM_EncoderInterfaceConfig也会设置
+	TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;	          //极性：选择为上升沿触发捕获。后续TIM_EncoderInterfaceConfig也会设置，但是作用不一样
 	//TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;     //输入信号：选择直通，不交叉。
 	//TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;				  //捕获预分频：选择不分频，每次信号都触发捕获
 	TIM_ICInitStructure.TIM_ICFilter = 0xF;							      //输入滤波器参数：可以过滤信号抖动
@@ -58,7 +58,7 @@ void Encoder_Init(void)
 	
 	// 结构体已经写入到TIM3的硬件寄存器了。接下来，可以换个参数，还可以继续使用该结构体。
 	TIM_ICInitStructure.TIM_Channel = TIM_Channel_2;				      //选择配置定时器通道2
-	TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;	          //极性：选择为上升沿触发捕获。后续TIM_EncoderInterfaceConfig也会设置
+	TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;	          //极性：选择为上升沿触发捕获。后续TIM_EncoderInterfaceConfig也会设置，但是作用不一样
 	//TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;     //输入信号：选择直通，不交叉。
 	//TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;				  //捕获预分频：选择不分频，每次信号都触发捕获	
 	TIM_ICInitStructure.TIM_ICFilter = 0xF;							      //输入滤波器参数，可以过滤信号抖动
