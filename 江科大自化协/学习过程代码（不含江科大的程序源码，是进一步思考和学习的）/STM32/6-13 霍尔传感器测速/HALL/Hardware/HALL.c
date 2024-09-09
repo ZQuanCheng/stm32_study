@@ -57,10 +57,10 @@ void Hall_Init(void)
 																	//则最好执行此函数，给结构体所有成员都赋一个默认值
 																	//避免结构体初值不确定的问题
 	TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;				      //选择配置定时器通道1
-	TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;	          //是否反相：选择为不反相。注意此时参数的Rising和Falling已经不代表上升沿和下降沿了，而是代表是否反相
+	TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;	          //极性：选择为上升沿触发捕获。                    注意：边沿检测参数无效，不影响霍尔传感器接口的TI1F_ED。
 	TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_TRC;            //输入信号：选择TRC。TI1的跳变沿TI1F_ED会接通TRC。
 	TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;				  //捕获预分频：选择不分频，每次信号都触发捕获
-	TIM_ICInitStructure.TIM_ICFilter = 0xF;							      //输入滤波器参数：可以过滤信号抖动
+	TIM_ICInitStructure.TIM_ICFilter = 0xF;							      //输入滤波器参数：可以过滤信号抖动。              注意：输入滤波参数无效，不影响霍尔传感器接口的TI1F_ED。
 	TIM_ICInit(TIM2, &TIM_ICInitStructure);							//将结构体变量交给TIM_ICInit，配置TIM2的输入捕获通道
     // 三个输入通过异或门，只反映在输入捕获通道1上。
 	
