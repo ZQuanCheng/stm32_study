@@ -4,7 +4,6 @@
 #include "TIM2_master.h"
 #include "TIM3_slave_master.h"
 #include "TIM1_slave.h"
-#include "IC.h"
 
 int main(void)
 {
@@ -13,20 +12,18 @@ int main(void)
 	
 	TIM2_PWM_Init();	//TIM2-CH2-PA1。频率1kHz、占空比50%
 	TIM3_PWM_Init();	//TIM3-CH1-PA6。频率2kHz、占空比50%
-	//TIM1_PWM_Init();	//TIM1-CH1-PA8。频率10kHz、占空比50%
+	TIM1_PWM_Init();	//TIM1-CH1-PA8。频率10kHz、占空比50%
 	
-	//只需要使用软件触发来启动主定时器TIM2，TIM3由TIM2的TRGO触发启动
+	//只需要使用软件触发来启动主定时器TIM2，TIM3由TIM2的TRGO触发启动，TIM1由TIM3的TRGO触发启动
 	TIM_Cmd(TIM2, ENABLE);
 	
-	IC_Init();		    //输入捕获初始化，测量TIM2和TIM3级联（注释掉TIM1_PWM_Init()和TIM_Cmd()），时用TIM1-CH1-PA8输入捕获。
-	
 	/*显示静态字符串*/
-	OLED_ShowString(1, 1, "Freq:00000Hz");		//1行1列显示字符串Freq:00000Hz
-	OLED_ShowString(2, 1, "Duty:00%");			//2行1列显示字符串Duty:00%
+	OLED_ShowString(1, 1, "Outing");		//1行1列显示字符串Outing
+	OLED_ShowString(2, 1, "TIM2_CH2_PA1");	//2行1列显示字符串TIM2_CH2_PA1
+	OLED_ShowString(3, 1, "TIM3_CH1_PA6");	//3行1列显示字符串TIM3_CH1_PA6
+	OLED_ShowString(4, 1, "TIM1_CH1_PA8");	//4行1列显示字符串TIM1_CH1_PA8
 	
 	while (1)
 	{
-		OLED_ShowNum(1, 6, IC_GetFreq(), 5);	//不断刷新显示输入捕获测得的频率
-		OLED_ShowNum(2, 6, IC_GetDuty(), 2);	//不断刷新显示输入捕获测得的占空比
 	}
 }
