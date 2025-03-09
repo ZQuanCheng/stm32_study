@@ -1,0 +1,10 @@
+F:\工作\秋招\1-嵌入式工程师学习\3-单片机\江科大自化协\常用资料(自己整理)\Keil\支持包PACK
+
+ARM.CMSIS.5.6.0
+ARM.CMSIS-Driver.2.4.1
+GigaDevice.GD32F3x0_DFP.3.1.0
+GigaDevice.GD32F30x_DFP.2.2.3
+Keil.ARM_Compiler.1.6.2
+Keil.MDK-Middleware.7.10.0
+Keil.STM32F1xx_DFP.2.2.0
+Keil.STM32F4xx_DFP.1.0.8
